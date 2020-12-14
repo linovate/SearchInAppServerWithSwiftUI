@@ -27,13 +27,12 @@ final class SearchViewModel: ObservableObject {
                 text, isSearching -> String in
                 return text
             })
-            //This assumes successful search need more than one characters, i.e. Every brand name in "database" contains at least 2 characters. In case brand names that contains only one character exist, change to .filter({ $0.count > 0 })
-            .filter({ $0.count > 1 })
+            .filter({ $0.count > 0 })
             .removeDuplicates()
             .receive(on: RunLoop.main)
         
-        subscriber = publisher.sink { [weak self] isLengthLongerThanOne in
-            self?.makeServerQuery(searchTerm: self?.text ?? "")
+        subscriber = publisher.sink { [weak self] txt in
+            self?.makeServerQuery(searchTerm: txt)
         }
     }
     
